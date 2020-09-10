@@ -26,11 +26,12 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, rando
 # random_state is set to 0 to ensure test_size is not set randomly
 
 ### training model using random forest generator
-model = RandomForestRegressor(n_estimators = 24, random_state = 0) #n_estimate is the number of decision trees
+model = RandomForestRegressor(n_estimators = 28, random_state = 0) #n_estimate is the number of decision trees
 model.fit(x_train, y_train) #training the model with data set
-
 #model.score() is used to test the accuracy of the model
-print('Accuracy of the model:', round(model.score(x_test, y_test), 2) * 100, '%')
+accuracy = model.score(x_test, y_test) * 100
+model.fit(x_train, y_train) #training the model with data set
+print('Accuracy of the model:', accuracy, '%')
 
 #testing
 new_data = []
@@ -40,7 +41,7 @@ new_data.append(input('Fuel: ').capitalize())
 new_data.append(input('Transmission: ').capitalize())
 new_data[2] = fuel_lbl_enc.transform([new_data[2]])[0]
 new_data[3] = trans_lbl_enc.transform([new_data[3]])[0]
-print(chr(8377), model.predict([new_data])[0])
+print(chr(8377), round(model.predict([new_data])[0], 2))
 
 pickle.dump(model, open('model.pkl', 'wb'))
 pickle.dump(fuel_lbl_enc, open('fuel_lbl_enc', 'wb'))
