@@ -30,8 +30,21 @@ model = RandomForestRegressor(n_estimators = 28, random_state = 0) #n_estimate i
 model.fit(x_train, y_train) #training the model with data set
 #model.score() is used to test the accuracy of the model
 accuracy = model.score(x_test, y_test) * 100
-model.fit(x_train, y_train) #training the model with data set
 print('Accuracy of the model:', accuracy, '%')
+
+diff_list = []
+for i in range(len(y_test)):
+	diff = y_test[i] - round(model.predict([x_test[i]])[0], 2)
+	if diff < 0:
+		diff *= -1
+	diff_list.append(diff)
+
+diff_list = np.array(diff_list)
+print(diff_list.mean())
+print(diff_list.max())
+print(diff_list.min())
+
+exit()
 
 #testing
 new_data = []
@@ -41,6 +54,7 @@ new_data.append(input('Fuel: ').capitalize())
 new_data.append(input('Transmission: ').capitalize())
 new_data[2] = fuel_lbl_enc.transform([new_data[2]])[0]
 new_data[3] = trans_lbl_enc.transform([new_data[3]])[0]
+print(chr(8377), round(model.predict([new_data])[0], 2))
 print(chr(8377), round(model.predict([new_data])[0], 2))
 
 pickle.dump(model, open('model.pkl', 'wb'))
